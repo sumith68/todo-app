@@ -6,10 +6,20 @@ function TodoInput() {
   const [error, setError] = React.useState("")
   const [alertCss, setAlertCss] = React.useState("")
 
+  const url = "http://localhost:3000/api/v1/todos"
+
+  React.useEffect(
+    () => {
+      fetch(url)
+        .then(response => response.json())
+        .then(data => setTodos(data['todos']))
+    }, [])
+
   function handleChange(event) {
     setTodo(event.target.value)
   }
 
+  // Add a todo
   function handleSubmit(event) {
     event.preventDefault();
     if (todo.trim().length === 0) {
@@ -20,6 +30,7 @@ function TodoInput() {
     }
   }
 
+  // Remove a todo
   function handleClick(event, index) {
     const newTodos = todos.filter((todo, ind) => ind !== index)
     setTodos(newTodos)
@@ -47,7 +58,7 @@ function TodoInput() {
     return todos.map(
       (todo, index) =>
         <div key={index} className="max-w-md mx-auto bg-gray-100 border border-gray-400 text-gray-900 px-4 py-3 rounded relative mb-1" role="alert">
-          <span className="block sm:inline">{todo}</span>
+          <span className="block sm:inline">{todo.text}</span>
           <span className="absolute top-0 bottom-0 right-0 px-2 py-1">
             <button className="flex-shrink-0 bg-gray-700 hover:bg-gray-900 border-gray-700 hover:border-gray-900 text-sm border-4 text-white py-1 px-2 rounded" onClick={(event) => handleClick(event, index)} >Remove</button>
           </span>
@@ -68,9 +79,6 @@ function TodoInput() {
 
 
       {TodoElement()}
-
-
-
 
     </div>
   )
