@@ -1,7 +1,7 @@
 import React from "react"
 
 function TodoInput() {
-  const [todo, setTodo] = React.useState({ text: "", completed: false })
+  const [todo, setTodo] = React.useState({ id: "", text: "", completed: false })
   const [todos, setTodos] = React.useState([])
   const [error, setError] = React.useState("")
   const [alertCss, setAlertCss] = React.useState("")
@@ -37,6 +37,19 @@ function TodoInput() {
       })
   }
 
+  function deleteTodo(todoId) {
+    const url = `http://localhost:3000/api/v1/todos/${todoId}`
+    fetch(url, {
+      method: 'DELETE'
+    })
+      .then((response) => {
+        console.log(response.json())
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+  }
+
   // Add a Todo
   function handleSubmit(event) {
     event.preventDefault();
@@ -50,8 +63,9 @@ function TodoInput() {
   }
 
   // Remove a Todo
-  function handleClick(event, index) {
-    const newTodos = todos.filter((todo, ind) => ind !== index)
+  function handleClick(event, id) {
+    deleteTodo(id)
+    const newTodos = todos.filter((todo) => todo.id !== id)
     setTodos(newTodos)
   }
 
@@ -79,7 +93,7 @@ function TodoInput() {
         <div key={index} className="max-w-md mx-auto bg-gray-100 border border-gray-400 text-gray-900 px-4 py-3 rounded relative mb-1" role="alert">
           <span className="block sm:inline">{todo.text}</span>
           <span className="absolute top-0 bottom-0 right-0 px-2 py-1">
-            <button className="flex-shrink-0 bg-gray-700 hover:bg-gray-900 border-gray-700 hover:border-gray-900 text-sm border-4 text-white py-1 px-2 rounded" onClick={(event) => handleClick(event, index)} >Remove</button>
+            <button className="flex-shrink-0 bg-gray-700 hover:bg-gray-900 border-gray-700 hover:border-gray-900 text-sm border-4 text-white py-1 px-2 rounded" onClick={(event) => handleClick(event, todo.id)} >Remove</button>
           </span>
         </div>
     )
