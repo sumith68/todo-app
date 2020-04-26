@@ -25,7 +25,10 @@ function TodoInput() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(todo),
+      body: JSON.stringify({
+        text: todo.text,
+        completed: todo.completed
+      }),
     })
       .then((response) => response.json())
       .then((todo) => {
