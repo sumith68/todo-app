@@ -31,10 +31,7 @@ function TodoInput() {
       }),
     })
       .then((response) => response.json())
-      .then((todo) => {
-        console.log("TODOS", todos)
-        console.log('Success:', todo);
-      })
+      .then((data) => setTodos(prevTodos => [...prevTodos, data.todo]))
       .catch((error) => {
         console.error('Error:', error);
       })
@@ -60,7 +57,6 @@ function TodoInput() {
       setError("Invalid Todo: Todo cannot be blank")
     } else {
       createTodo()
-      setTodos(prevTodos => [...prevTodos, todo])
       setTodo({ ...todo, text: "" })
     }
   }
