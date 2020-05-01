@@ -2,7 +2,7 @@ module Api
   module V1
     class TodosController < ApplicationController
       skip_before_action :verify_authenticity_token
-      before_action :set_todo, only: [:destroy]
+      before_action :set_todo, only: [:destroy, :update]
 
       def index
         todos = Todo.all
@@ -24,6 +24,17 @@ module Api
           { status: 'success', result: 'Successfully deleted' }
         else
           { status: 'error', description: 'Error in setting deletion' }
+        end
+        render json: result
+      end
+
+
+      def update
+        result =
+        if @todo.update(todo_params)
+          {status: 'success', todo: @todo}
+        else
+          {status: 'error', description: 'Error in updation'}
         end
         render json: result
       end
